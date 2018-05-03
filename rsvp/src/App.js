@@ -8,26 +8,49 @@ class App extends Component {
     guests: [
       {
         name: 'Will',
-        isConfirmed: false
+        isConfirmed: false,
+        isEditing: false
       },
       {
         name: 'Johnny',
-        isConfirmed: true
+        isConfirmed: true,
+        isEditing: false
       },
       {
         name: 'Tim',
-        isConfirmed: false
+        isConfirmed: false,
+        isEditing: true
       }
     ]
   }
 
-  toggleConfirmationAt = indexToChange => 
+  toggleGuestPropertyAt = (property, indexToChange) => 
     this.setState({
       guests: this.state.guests.map((guest, index) => {
         if (index === indexToChange) {
           return {
             ...guest, // The spread operator transfers the keys and props from one obj to another
-            isConfirmed: !guest.isConfirmed
+            [property]: !guest[property]
+          }
+        }
+
+        return guest; // Returns the untouched object if there is no change.
+      })
+    });
+
+  toggleConfirmationAt = index =>
+    this.toggleGuestPropertyAt("isConfirmed", index);
+
+  toggleEditingAt = index =>
+    this.toggleGuestPropertyAt("isEditing", index);
+
+  setNameAt = (name, indexToChange) => 
+    this.setState({
+      guests: this.state.guests.map((guest, index) => {
+        if (index === indexToChange) {
+          return {
+            ...guest, // The spread operator transfers the keys and props from one obj to another
+            name
           }
         }
 
@@ -75,7 +98,9 @@ class App extends Component {
         </table>
         <GuestList 
           guests={this.state.guests} 
-          toggleConfirmationAt={this.toggleConfirmationAt} />
+          toggleConfirmationAt={this.toggleConfirmationAt} 
+          toggleEditingAt={this.toggleEditingAt}
+          setNameAt={this.setNameAt} />
       </div>
     </div>
     );
