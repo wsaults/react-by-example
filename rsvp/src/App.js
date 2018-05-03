@@ -31,7 +31,7 @@ class App extends Component {
           }
         }
 
-        return guest;
+        return guest; // Returns the untouched object if there is no change.
       })
     });
 
@@ -73,7 +73,9 @@ class App extends Component {
             </tr>
           </tbody>
         </table>
-        <GuestList guests={this.state.guests} />
+        <GuestList 
+          guests={this.state.guests} 
+          toggleConfirmationAt={this.toggleConfirmationAt} />
       </div>
     </div>
     );
