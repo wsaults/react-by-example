@@ -8,29 +8,21 @@ class App extends Component {
   state = {
     isFiltered: false,
     pendingGuest: "",
-    guests: [
-      {
-        name: 'Will',
-        isConfirmed: false,
-        isEditing: false
-      },
-      {
-        name: 'Johnny',
-        isConfirmed: true,
-        isEditing: false
-      },
-      {
-        name: 'Tim',
-        isConfirmed: false,
-        isEditing: true
-      }
-    ]
+    guests: []
   }
 
-  toggleGuestPropertyAt = (property, indexToChange) => 
+  lastGuestId = 0;
+
+  newGuestId = () => {
+    const id = this.lastGuestId;
+    this.lastGuestId += 1;
+    return id;
+  };
+
+  toggleGuestProperty = (property, id) => 
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
-        if (index === indexToChange) {
+      guests: this.state.guests.map(guest => {
+        if (id === guest.id) {
           return {
             ...guest, // The spread operator transfers the keys and props from one obj to another
             [property]: !guest[property]
@@ -41,24 +33,21 @@ class App extends Component {
       })
     });
 
-  toggleConfirmationAt = index =>
-    this.toggleGuestPropertyAt("isConfirmed", index);
+  toggleConfirmation = id =>
+    this.toggleGuestProperty("isConfirmed", id);
 
-  removeGuestAt = index =>
+  removeGuest = id =>
     this.setState({
-      guests: [
-        ...this.state.guests.slice(0, index),
-        ...this.state.guests.slice(index + 1)
-      ]
-    })
+      guests: this.state.guests.filter(guest => id !== guest.id)
+    });
 
-  toggleEditingAt = index =>
-    this.toggleGuestPropertyAt("isEditing", index);
+  toggleEditing = id =>
+    this.toggleGuestProperty("isEditing", id);
 
-  setNameAt = (name, indexToChange) => 
+  setName = (name, id) => 
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
-        if (index === indexToChange) {
+      guests: this.state.guests.map(guest => {
+        if (id === guest.id) {
           return {
             ...guest, // The spread operator transfers the keys and props from one obj to another
             name
@@ -77,12 +66,14 @@ class App extends Component {
 
   newGuestSubmitHandler = e => {
     e.preventDefault();
+    const id= this.newGuestId();
     this.setState({ 
       guests: [
         {
           name: this.state.pendingGuest,
           isConfirmed: false,
-          isEditing: false
+          isEditing: false,
+          id
         },
         ...this.state.guests
       ],
@@ -113,10 +104,10 @@ class App extends Component {
         numberAttending={numberAttending}
         numberUnconfirmed={numberUnconfirmed}
         guests={this.state.guests}
-        toggleConfirmationAt={this.toggleConfirmationAt}
-        toggleEditingAt={this.toggleEditingAt}
-        removeGuestAt={this.removeGuestAt}
-        setNameAt={this.setNameAt}
+        toggleConfirmation={this.toggleConfirmation}
+        toggleEditing={this.toggleEditing}
+        removeGuest={this.removeGuest}
+        setName={this.setName}
         pendingGuest={this.state.pendingGuest} />
     </div>
     );
