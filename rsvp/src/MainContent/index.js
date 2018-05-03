@@ -4,14 +4,11 @@ import Counter from './Counter';
 import GuestList from './GuestList';
 import ConfirmedFilter from './ConfirmedFilter';
 
-const Main = props => 
+const MainContent = props => 
   <div className="main">
-    <div>
-      <h2>Invitees</h2>
-      <ConfirmedFilter 
+    <ConfirmedFilter 
         toggleFilter={props.toggleFilter}
         isFiltered={props.isFiltered} />
-    </div>
     <Counter 
       totalInvited={props.totalInvited}
       numberAttending={props.numberAttending}
@@ -26,7 +23,7 @@ const Main = props =>
       pendingGuest={props.pendingGuest} />
   </div>
 
-Main.propTypes = {
+MainContent.propTypes = {
   toggleFilter: PropTypes.func.isRequired,
   isFiltered: PropTypes.bool.isRequired,
   totalInvited: PropTypes.number.isRequired,
@@ -40,4 +37,4 @@ Main.propTypes = {
   pendingGuest: PropTypes.string.isRequired
 };
 
-export default Main;
+export default MainContent;
